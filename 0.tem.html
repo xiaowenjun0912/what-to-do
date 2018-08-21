@@ -22,7 +22,7 @@
             <input autofocus="autofocus" @keyup.enter="addToDo" v-model.trim="sendMessage" autocomplete="off" placeholder="你想干什么?" class="new-todo">
         </header>
         <section class="main">
-            <input type="checkbox" class="toggle-all">
+            <input type="checkbox" class="toggle-all" v-model="isCheckAll">
             <ul class="todo-list">
                 <li v-for="(item, index) in filterToDo" class="todo" :class="{completed:item.completed,editing:item.isEditing}">
                     <div class="view">
@@ -196,6 +196,28 @@
                 return this.todoList.filter(v => {
                     return v.completed
                 }).length;
+            },
+            isCheckAll:{
+                //取值的时候会触发
+                get:function(){
+                    console.log('取值');
+                    //什么时候勾选 顶部
+                    let totalNum = this.todoList.length;
+                    let checkedNum = this.todoList.filter(v=>{
+                        return v.completed
+                    }).length;
+
+                    return totalNum == checkedNum;
+                },
+                //赋值的时候会触发
+                set:function(v){
+                    console.log('赋值');
+                    console.log(v);
+                    // 让下面的checkbox 的选中状态和自己一样
+                    this.todoList.forEach(item=>{
+                        item.completed=v
+                    })
+                }
             }
 
         }
